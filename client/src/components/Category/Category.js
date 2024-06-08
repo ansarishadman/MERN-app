@@ -5,13 +5,13 @@ const Category = ({ category, deleteCategory, addCategory, editCategory }) => {
 
     return (
         <div className='text-black'>
-            <div className='text-base font-semibold cursor-pointer'
+            <div className='text-base font-semibold cursor-pointer break-words'
                 onClick={() => setExpand(!expand)} key={category.id}>
                 {category.subCategory.length > 0 ? '>  ' : ''}{category.name}
-                <span className='pl-4 text-xs' onClick={e => deleteCategory(e, category._id)}>❌</span>
                 <span className='pl-4 text-xs' onClick={e => addCategory(e, category._id)}>➕</span>
                 <span className='pl-4 text-xs'
                     onClick={e => editCategory(e, category._id, category.parent)}>🖊</span>
+                <span className='pl-4 text-xs' onClick={e => deleteCategory(e, category._id)}>❌</span>
             </div>
             <div style={{ display: expand ? 'block' : 'none' }}>
                 {category.subCategory.map(subCategory => (
