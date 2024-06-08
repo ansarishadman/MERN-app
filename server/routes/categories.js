@@ -20,9 +20,9 @@ router.put('/:categoryId', async (req, res) => {
     try {
         let newCategory
         const { name: categoryName } = req.body;
-        const categoryId = req.params;
+        const { categoryId } = req.params;
         if (categoryId) {
-            newCategory = await Category.updateOne({ _id: new mongoose.Types.ObjectId(categoryId) }, { $set: { name: categoryName } })
+            newCategory = await Category.updateOne({ _id: categoryId }, { $set: { name: categoryName } })
         }
         res.status(201).json(newCategory);
     } catch (error) {
