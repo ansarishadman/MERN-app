@@ -3,11 +3,17 @@ import React, { useState } from 'react'
 const Category = ({ category, deleteCategory, addCategory, editCategory }) => {
     const [expand, setExpand] = useState(true)
 
+    const getDropdownIcon = () => {
+        if (expand) return 'v ';
+        if (!expand) return '> '
+    }
+
     return (
         <div className='text-black'>
             <div className='text-base font-semibold cursor-pointer break-words'
                 onClick={() => setExpand(!expand)} key={category.id}>
-                {category.subCategory.length > 0 ? '>  ' : ''}{category.name}
+                <span className='text-green-800 text-2xl text-bold'>{category.subCategory.length > 0 ? getDropdownIcon() : ''}</span>
+                <span className='text-blue-800 text-md'>{category.name}</span>
                 <span className='pl-4 text-xs' onClick={e => addCategory(e, category._id)}>➕</span>
                 <span className='pl-4 text-xs'
                     onClick={e => editCategory(e, category._id, category.parent)}>🖊</span>

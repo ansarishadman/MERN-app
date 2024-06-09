@@ -150,9 +150,9 @@ const Dashboard = () => {
                 <div className='col-span-3 bg-white-500'>
                     <div className='text-black text-center p-4'>
                         <div className='text-xl font-semibold'>Tree Catalogue!
-                    <button className='ml-4 text-green-700 text-sm hover:text-white border border-green-700 p-1 rounded' onClick={addParentCategory}>Add Parent</button>
+                    <button className='ml-4 text-green-700 text-sm hover:text-blue-500 border border-green-700 p-1 rounded' onClick={addParentCategory}>Add Parent</button>
                     </div></div>
-                    <div className='pl-4 pb-10'>
+                    <div className='pl-4 pb-20'>
                         {categories.map(category => {
                             return <Category
                                 editCategory={editCategory}
