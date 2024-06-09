@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Register() {
   const [name, setName] = useState('');
@@ -70,6 +70,14 @@ function Register() {
             />
           </div>
         </form>
+        <div className='mt-4 text-center'>
+          <p>
+            Already registered?{' '}
+            <Link to='/login' className='text-blue-500 hover:underline'>
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
