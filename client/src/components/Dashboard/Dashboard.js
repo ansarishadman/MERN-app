@@ -165,7 +165,7 @@ const Dashboard = () => {
                         </div>
                         <div className='flex-grow flex items-center justify-center'>
                             <div className='text-2xl'>
-                                Category Application to Add/Delete/Edit categories!
+                                E-Commerce Fashion categories in Tree-Structure!
                             </div>
                         </div>
                     </div>
