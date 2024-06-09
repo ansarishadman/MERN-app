@@ -17,6 +17,7 @@ This is a client-server architecture for a MERN (MongoDB, Express.js, React.js, 
 
 3. **Running the Server**:
    - Navigate to the `server` directory using the command line.
+   - Run MongoDB in PORT=27017
    - Run the command:
      ```
      npm run dev
