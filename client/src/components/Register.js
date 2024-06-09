@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import { authenticationAPI } from '../constants/constants';
+import jwt from 'jsonwebtoken'
 
 function Register() {
   const [name, setName] = useState('');
@@ -8,9 +10,32 @@ function Register() {
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+		const checkUser = async () => {
+			const token = localStorage.getItem('token');
+			if (token) {
+				try {
+					const user = jwt.decode(token);
+					console.log(user)
+					if (!user) {
+						localStorage.removeItem('token');
+					} else {
+						navigate('/dashboard', { replace: true });
+					}
+				} catch (error) {
+					console.error('Invalid token:', error);
+					localStorage.removeItem('token');
+				}
+			}
+		};
+
+		checkUser();
+	})
+
+
   const registerUser = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://127.0.0.1:1337/api/authentication/register', {
+    const response = await fetch(`${authenticationAPI}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

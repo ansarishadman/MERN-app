@@ -17,7 +17,7 @@ const Category = ({ category, deleteCategory, addCategory, editCategory }) => {
                 <span className='pl-4 text-xs' onClick={e => addCategory(e, category._id)}>➕</span>
                 <span className='pl-4 text-xs'
                     onClick={e => editCategory(e, category._id, category.parent)}>🖊</span>
-                <span className='pl-4 text-xs' onClick={e => deleteCategory(e, category._id)}>❌</span>
+                <span className='pl-4 text-xs' onClick={e => deleteCategory(e, category)}>❌</span>
             </div>
             <div style={{ display: expand ? 'block' : 'none' }}>
                 {category.subCategory.map(subCategory => (

@@ -1,13 +1,39 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { authenticationAPI } from '../constants/constants';
+import jwt from 'jsonwebtoken'
 
 function Login() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const checkUser = async () => {
+			const token = localStorage.getItem('token');
+			if (token) {
+				try {
+					const user = jwt.decode(token);
+					console.log(user)
+					if (!user) {
+						localStorage.removeItem('token');
+					} else {
+						navigate('/dashboard', { replace: true });
+					}
+				} catch (error) {
+					console.error('Invalid token:', error);
+					localStorage.removeItem('token');
+				}
+			}
+		};
+
+		checkUser();
+	})
 
 	async function loginUser(event) {
 		event.preventDefault()
 
-		const response = await fetch('http://127.0.0.1:1337/api/authentication/login', {
+		const response = await fetch(`${authenticationAPI}/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -23,7 +49,7 @@ function Login() {
 		if (data.user) {
 			localStorage.setItem('token', data.user)
 			alert('Login successful')
-			window.location.href = '/dashboard'
+			navigate('/dashboard', { replace: true })
 		} else {
 			alert('Please check your username and password')
 		}
