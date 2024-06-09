@@ -217,4 +217,46 @@ describe('Dashboard Component', () => {
 
     expect(localStorageRemoveItemSpy).toHaveBeenCalledWith('token');
   });
+
+  test('removes token to redirect to login page if user is not found', async () => {
+    const mockInvalidToken = 'invalid-token';
+    localStorage.setItem('token', mockInvalidToken);
+
+    jest.spyOn(jwt, 'decode').mockReturnValueOnce(null)
+
+    const localStorageRemoveItemSpy = jest.spyOn(window.localStorage.__proto__, 'removeItem');
+    localStorageRemoveItemSpy.mockImplementation(() => {});
+
+    render(
+      <BrowserRouter>
+        <Dashboard />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(localStorageRemoveItemSpy).toHaveBeenCalledWith('token')
+    });
+  });
+
+  test('removes token and redirects to login if an invalid token is found', async () => {
+    const mockInvalidToken = 'invalid-token';
+    localStorage.setItem('token', mockInvalidToken);
+
+    jest.spyOn(jwt, 'decode').mockImplementationOnce(() => {
+      throw new Error('Invalid token');
+    });
+
+    const localStorageRemoveItemSpy = jest.spyOn(window.localStorage.__proto__, 'removeItem');
+    localStorageRemoveItemSpy.mockImplementation(() => {});
+
+    render(
+      <BrowserRouter>
+        <Dashboard />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(localStorageRemoveItemSpy).toHaveBeenCalledWith('token')
+    });
+  });
 });
