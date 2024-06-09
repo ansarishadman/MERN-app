@@ -23,6 +23,17 @@ This is a client-server architecture for a MERN (MongoDB, Express.js, React.js, 
      ```
    - This will start the Node.js server using nodemon, which automatically restarts the server when changes are detected.
 
+4. **UI**
+- Register
+![alt text](image-2.png)
+
+- Login
+![alt text](image-1.png)
+
+- Dashboard
+![alt text](image.png)
+
+
 ## Additional Notes
 
 - Ensure you have Node.js and npm installed on your system before running the application.
