@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom'
 import { BrowserRouter } from 'react-router-dom';
 import Login from './Login';
+import jwt from 'jsonwebtoken'
 
 global.fetch = jest.fn(() =>
   Promise.resolve({
@@ -115,6 +116,65 @@ describe('Login Component', () => {
       expect(window.alert).toHaveBeenCalledWith('Please check your username and password');
       expect(localStorage.getItem('token')).toBeNull();
       expect(mockedNavigate).not.toHaveBeenCalled();
+    });
+  });
+
+  test('redirects to dashboard if a valid token is found', async () => {
+    const mockToken = 'fake-token';
+    localStorage.setItem('token', mockToken);
+
+    jest.spyOn(jwt, 'decode').mockReturnValueOnce({ user: 'fake-user' });
+
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(mockedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true });
+    });
+  });
+
+  test('stays in login page if user is not found', async () => {
+    const mockInvalidToken = 'invalid-token';
+    localStorage.setItem('token', mockInvalidToken);
+
+    jest.spyOn(jwt, 'decode').mockReturnValueOnce(null)
+
+    const localStorageRemoveItemSpy = jest.spyOn(window.localStorage.__proto__, 'removeItem');
+    localStorageRemoveItemSpy.mockImplementation(() => {});
+
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(localStorageRemoveItemSpy).toHaveBeenCalledWith('token')
+    });
+  });
+
+  test('removes token and redirects to login if an invalid token is found', async () => {
+    const mockInvalidToken = 'invalid-token';
+    localStorage.setItem('token', mockInvalidToken);
+
+    jest.spyOn(jwt, 'decode').mockImplementationOnce(() => {
+      throw new Error('Invalid token');
+    });
+
+    const localStorageRemoveItemSpy = jest.spyOn(window.localStorage.__proto__, 'removeItem');
+    localStorageRemoveItemSpy.mockImplementation(() => {});
+
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(localStorageRemoveItemSpy).toHaveBeenCalledWith('token')
     });
   });
 });
