@@ -86,11 +86,11 @@ describe('Dashboard Component', () => {
     });
   });
 
-  test.skip('handles editing a category', async () => {
+  test('handles editing a category', async () => {
     jest.spyOn(jwt, 'decode').mockReturnValueOnce({ user: 'fake-user' })
     localStorage.setItem('token', 'fake-token');
 
-    const mockCategories = [{ _id: '1', name: 'Category 1', parent: null }];
+    const mockCategories = [{ _id: '1', name: 'Category 1', subCategory: [] }];
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
@@ -112,12 +112,12 @@ describe('Dashboard Component', () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ name: 'Updated Category 1' }),
+        json: () => Promise.resolve([{ name: 'Updated Category 1', _id: '2', subCategory: [] }]),
       })
     );
 
     fireEvent.click(screen.getByText('Category 1'));
-    fireEvent.click(screen.getByText('Edit'));
+    fireEvent.click(screen.getByTestId('edit'));
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/categories/1', expect.any(Object));
@@ -125,12 +125,14 @@ describe('Dashboard Component', () => {
     });
   });
 
-  test.skip('handles deleting a category', async () => {
-    jwt.decode.mockReturnValue({ user: 'fake-user' });
+  test('handles deleting a category', async () => {
+    jest.spyOn(jwt, 'decode').mockReturnValueOnce({ user: 'fake-user' })
     localStorage.setItem('token', 'fake-token');
-    const mockCategories = [{ _id: '1', name: 'Category 1', parent: null }];
+
+    const mockCategories = [{ _id: '1', name: 'Category 1', subCategory: [] }];
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
+        ok: true,
         json: () => Promise.resolve(mockCategories),
       })
     );
@@ -148,12 +150,13 @@ describe('Dashboard Component', () => {
     window.confirm = jest.fn().mockReturnValue(true);
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
-        json: () => Promise.resolve({}),
+        ok: true,
+        json: () => Promise.resolve([]),
       })
     );
 
     fireEvent.click(screen.getByText('Category 1'));
-    fireEvent.click(screen.getByText('Delete'));
+    fireEvent.click(screen.getByTestId('delete'));
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/categories/1', { method: 'DELETE' });
