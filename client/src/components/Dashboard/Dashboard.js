@@ -65,7 +65,7 @@ const Dashboard = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to add category');
+                console.error('Error adding category')
             }
 
             const data = await response.json();
@@ -159,7 +159,7 @@ const Dashboard = () => {
                 <div className='col-span-7 bg-green-100'>
                     <div className='min-h-screen flex flex-col'>
                         <div className='flex justify-end p-4'>
-                            <button className='text-red-700 text-sm hover:text-blue-500 border border-red-700 p-1 rounded' onClick={logout}>
+                            <button data-testid='logout' className='text-red-700 text-sm hover:text-blue-500 border border-red-700 p-1 rounded' onClick={logout}>
                                 Logout
                             </button>
                         </div>
