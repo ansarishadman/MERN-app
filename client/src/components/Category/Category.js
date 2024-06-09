@@ -14,10 +14,10 @@ const Category = ({ category, deleteCategory, addCategory, editCategory }) => {
                 onClick={() => setExpand(!expand)} key={category.id}>
                 <span className='text-green-800 text-2xl text-bold'>{category.subCategory.length > 0 ? getDropdownIcon() : ''}</span>
                 <span className='text-blue-800 text-md'>{category.name}</span>
-                <span className='pl-4 text-xs' onClick={e => addCategory(e, category._id)}>➕</span>
-                <span className='pl-4 text-xs'
+                <span className='pl-4 text-xs' data-testid='add' onClick={e => addCategory(e, category._id)}>➕</span>
+                <span className='pl-4 text-xs' data-testid='edit'
                     onClick={e => editCategory(e, category._id, category.parent)}>🖊</span>
-                <span className='pl-4 text-xs' onClick={e => deleteCategory(e, category)}>❌</span>
+                <span className='pl-4 text-xs' data-testid='delete' onClick={e => deleteCategory(e, category)}>❌</span>
             </div>
             <div style={{ display: expand ? 'block' : 'none' }}>
                 {category.subCategory.map(subCategory => (
