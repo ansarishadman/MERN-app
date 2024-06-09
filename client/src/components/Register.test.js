@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Register from './Register';
+import jwt from 'jsonwebtoken'
 import '@testing-library/jest-dom'; 
 
 global.fetch = jest.fn(() =>
@@ -91,6 +92,61 @@ describe('Register Component', () => {
       );
 
       expect(mockedNavigate).toHaveBeenCalledWith('/login');
+    });
+  });
+
+  test('redirects to dashboard if token exists and is valid', async () => {
+    const mockToken = 'fake-token';
+    localStorage.setItem('token', mockToken);
+    
+    jest.spyOn(jwt, 'decode').mockReturnValue({ username: 'testUser' });
+
+    render(
+      <BrowserRouter>
+        <Register />
+      </BrowserRouter>
+    );
+
+    expect(mockedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true });
+  });
+
+  test('removes token if token is invalid', async () => {
+    const mockToken = 'invalid-token';
+    localStorage.setItem('token', mockToken);
+    
+    jest.spyOn(jwt, 'decode').mockImplementationOnce(() => {
+      throw new Error('Invalid token');
+    });
+
+    const localStorageRemoveItemSpy = jest.spyOn(window.localStorage.__proto__, 'removeItem');
+    localStorageRemoveItemSpy.mockImplementation(() => {});
+
+    render(
+      <BrowserRouter>
+        <Register />
+      </BrowserRouter>
+    );
+
+    expect(localStorageRemoveItemSpy).toHaveBeenCalledWith('token');
+  });
+
+  test('logsout if user is invalid', async () => {
+    const mockInvalidToken = 'invalid-token';
+    localStorage.setItem('token', mockInvalidToken);
+
+    jest.spyOn(jwt, 'decode').mockReturnValueOnce(null)
+
+    const localStorageRemoveItemSpy = jest.spyOn(window.localStorage.__proto__, 'removeItem');
+    localStorageRemoveItemSpy.mockImplementation(() => {});
+
+    render(
+      <BrowserRouter>
+        <Register />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(localStorageRemoveItemSpy).toHaveBeenCalledWith('token')
     });
   });
 });
