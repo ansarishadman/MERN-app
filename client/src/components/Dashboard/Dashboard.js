@@ -102,38 +102,9 @@ const Dashboard = () => {
         }
     }
 
-    const addParentCategory = async (e) => {
-        e.stopPropagation();
-        const parentName = window.prompt('Enter parent name');
-        if (!parentName) return;
-
-        let newCategory = { name: parentName, parent: null }
-        try {
-            const response = await fetch(`${categoryAPI}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newCategory)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to add category');
-            }
-
-            const data = await response.json();
-            fetchCategories()
-            console.log('Category added successfully:', data);
-            return data;
-        } catch (error) {
-            console.error('Error adding category:', error);
-            throw error;
-        }
-    }
-
     const addCategory = async (e, parentId) => {
         e.stopPropagation();
-        let newCategoryName = window.prompt('Enter category name!');
+        let newCategoryName = window.prompt(`Enter ${!parentId ? 'parent' : ''} category name!`);
         if (!newCategoryName) return;
 
         let newCategory = { name: newCategoryName, parent: parentId }
@@ -175,7 +146,7 @@ const Dashboard = () => {
                 <div className='col-span-3 bg-white-500'>
                     <div className='text-black text-center p-4'>
                         <div className='text-xl font-semibold'>Tree Catalogue!
-                            <button className='ml-4 text-green-700 text-sm hover:text-blue-500 border border-green-700 p-1 rounded' onClick={addParentCategory}>Add Parent</button>
+                            <button className='ml-4 text-green-700 text-sm hover:text-blue-500 border border-green-700 p-1 rounded' onClick={e => addCategory(e, null)}>Add Parent</button>
                         </div></div>
                     <div className='pl-4 pb-20'>
                         {categories.map(category => {
