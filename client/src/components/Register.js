@@ -16,7 +16,6 @@ function Register() {
 			if (token) {
 				try {
 					const user = jwt.decode(token);
-					console.log(user)
 					if (!user) {
 						localStorage.removeItem('token');
 					} else {

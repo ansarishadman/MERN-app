@@ -14,7 +14,6 @@ const Dashboard = () => {
             if (token) {
                 try {
                     const user = jwt.decode(token);
-                    console.log(user)
                     if (!user) {
                         localStorage.removeItem('token');
                         navigate('/login', { replace: true });
@@ -42,7 +41,6 @@ const Dashboard = () => {
                 throw new Error('Failed to fetch categories');
             }
             const data = await response.json();
-            console.log(data)
             setCategories(data);
         } catch (err) {
             console.log(err.message);
@@ -72,7 +70,7 @@ const Dashboard = () => {
 
             const data = await response.json();
             fetchCategories()
-            console.log('Category added successfully:', data);
+            console.log('Category edited successfully:', data);
             return data;
         } catch (error) {
             console.error('Error adding category:', error);
