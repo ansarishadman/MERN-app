@@ -40,7 +40,7 @@ const Dashboard = () => {
             const response = await fetch(`${categoryAPI}`, {
                 method: 'GET',
                 headers: {
-                    authorization: `Bearer ${token}`,
+                    authorization: `${token}`,
                 }
             });
             if (!response.ok) {
@@ -67,7 +67,7 @@ const Dashboard = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    authorization: `Bearer ${token}`,
+                    authorization: `${token}`,
                 },
                 body: JSON.stringify(updatedCategory)
             });
@@ -98,7 +98,7 @@ const Dashboard = () => {
             const response = await fetch(`${categoryAPI}/${categoryId}`, {
                 method: 'DELETE',
                 headers: {
-                    authorization: `Bearer ${token}`,
+                    authorization: `${token}`,
                 }
             });
             if (response.ok) {
@@ -124,7 +124,7 @@ const Dashboard = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    authorization: `Bearer ${token}`,
+                    authorization: `${token}`,
                 },
                 body: JSON.stringify(newCategory)
             });

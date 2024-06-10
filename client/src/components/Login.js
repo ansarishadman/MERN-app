@@ -46,7 +46,7 @@ function Login() {
 		const data = await response.json()
 
 		if (data.user) {
-			localStorage.setItem('token', data.user)
+			localStorage.setItem('token', `Bearer ${data.user}`)
 			alert('Login successful')
 			navigate('/dashboard', { replace: true })
 		} else {
