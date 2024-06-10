@@ -13,7 +13,7 @@ describe('authMiddleware', () => {
   it('should call next() if a valid token is provided', () => {
     const req = {
       headers: {
-        authorization: 'Bearer valid_token'
+        authorization: 'valid_token'
       }
     };
     const res = {};
@@ -51,7 +51,7 @@ describe('authMiddleware', () => {
   it('should return 500 if an invalid token is provided', () => {
     const req = {
       headers: {
-        authorization: 'Bearer invalid_token'
+        authorization: 'invalid_token'
       }
     };
     const res = {
