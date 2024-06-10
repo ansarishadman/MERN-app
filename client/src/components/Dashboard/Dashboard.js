@@ -18,7 +18,7 @@ const Dashboard = () => {
                         localStorage.removeItem('token');
                         navigate('/login', { replace: true });
                     } else {
-                        await fetchCategories();
+                        fetchCategories();
                     }
                 } catch (error) {
                     console.error('Invalid token:', error);
@@ -35,8 +35,14 @@ const Dashboard = () => {
     }, [])
 
     async function fetchCategories() {
+        const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${categoryAPI}`);
+            const response = await fetch(`${categoryAPI}`, {
+                method: 'GET',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                }
+            });
             if (!response.ok) {
                 throw new Error('Failed to fetch categories');
             }
@@ -55,11 +61,13 @@ const Dashboard = () => {
         if (!updatedName) return;
 
         let updatedCategory = { name: updatedName, parent: parentId }
+        const token = localStorage.getItem('token')
         try {
             const response = await fetch(`${categoryAPI}/${categoryId}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(updatedCategory)
             });
@@ -85,9 +93,13 @@ const Dashboard = () => {
         let confirmDelete = window.confirm(`Delete ${name} Category and its Sub-Category?`)
         if (!confirmDelete) return;
 
+        const token = localStorage.getItem('token')
         try {
             const response = await fetch(`${categoryAPI}/${categoryId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                }
             });
             if (response.ok) {
                 console.log('Category deleted successfully');
@@ -106,11 +118,13 @@ const Dashboard = () => {
         if (!newCategoryName) return;
 
         let newCategory = { name: newCategoryName, parent: parentId }
+        const token = localStorage.getItem('token')
         try {
             const response = await fetch(`${categoryAPI}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(newCategory)
             });

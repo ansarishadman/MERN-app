@@ -38,7 +38,7 @@ describe('Dashboard Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Tree Catalogue!')).toBeInTheDocument();
-      expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/categories');
+      expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/categories', { method: 'GET', headers: { authorization: 'Bearer fake-token' } });
     });
   });
 
@@ -159,7 +159,7 @@ describe('Dashboard Component', () => {
     fireEvent.click(screen.getByTestId('delete'));
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/categories/1', { method: 'DELETE' });
+      expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/categories/1', { method: 'DELETE', headers: { authorization: 'Bearer fake-token' } });
       expect(window.confirm).toHaveBeenCalledWith('Delete Category 1 Category and its Sub-Category?');
     });
   });
