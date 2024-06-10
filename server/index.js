@@ -5,12 +5,10 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const authentication = require('./routes/authentication')
 const categories = require('./routes/categories')
-const authMiddleware = require('./routes/middleware/authMiddleware')
 const PORT = 1337
 
 app.use(bodyParser.json())
 app.use(cors())
-app.use(authMiddleware)
 
 mongoose.connect('mongodb://localhost:27017/mern-app')
 

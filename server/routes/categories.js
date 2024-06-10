@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Category = require('../models/category.model');
+const authMiddleware = require('./middleware/authMiddleware')
+
+const app = express()
+
+app.use(authMiddleware)
 
 // ADD
 router.post('/', async (req, res) => {
